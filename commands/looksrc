@@ -1,0 +1,25 @@
+echo $1
+file=$(basename $1)
+
+dexdir="/home/ijinshan/apktool/dex2jar/dex2jar-0.0.9.8"
+jd_guidir="/home/ijinshan/apktool"
+outfile="/home/ijinshan/apktool/out_jar/$file.jar"
+
+if [ ! -f "$outfile" ]; then
+    cp $1 temp.zip
+    unzip temp classes.dex
+    rm temp.zip
+    mv classes.dex "$dexdir/classes.dex"
+    cd "$dexdir"
+    ./dex2jar.sh classes.dex
+    rm classes.dex
+    cd -
+    mv "$dexdir/classes_dex2jar.jar" "$outfile"
+else
+    rm "$outfile"
+    echo "jar aleady exist"
+fi
+
+cd "$jd_guidir"
+./jd-gui "$outfile" 2>/dev/null &
+

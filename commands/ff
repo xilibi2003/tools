@@ -1,0 +1,41 @@
+#!/bin/bash
+
+unset FF_LIST
+
+###todo: use some tmp file elegance
+FF_DATA_STORE='/tmp/ffffff_ff_store'
+
+function ff()
+{
+    local line
+    local index=1
+
+    for line in `find |grep -i $@`
+    do
+        FF_LIST=(${FF_LIST[@]} $line)
+    done
+    #debug
+    print_ff
+    
+    store_list
+}
+
+function print_ff()
+{
+    local index=1
+    for line in ${FF_LIST[@]}
+    do
+        printf "%6s  %s\n"   "[$index]"  "${FF_LIST[$(($index - 1))]}"
+        index=$(($index + 1))
+    done
+}
+
+function store_list()
+{
+    echo ${FF_LIST[@]} > $FF_DATA_STORE
+}
+
+###############
+# Main entry
+###############
+ff $@

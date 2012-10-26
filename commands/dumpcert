@@ -1,0 +1,23 @@
+function help() {
+    cat <<EOF
+Usage: dumpcert [apkfile] 
+EOF
+}
+
+function dumpcert()
+{
+CERT_FILE=`unzip -l $1 | grep META-INF | grep RSA | awk '{print $4}'`
+echo [`unzip -p $1 ${CERT_FILE} | keytool -printcert | grep SHA1\: | sed 's|SHA1:||g' | sed "s|\t ||g"`] = $1
+}
+
+function dumpcertfull()
+{
+CERT_FILE=`unzip -l $1 | grep META-INF | grep RSA | awk '{print $4}'`
+unzip -p $1 ${CERT_FILE} | keytool -printcert
+}
+
+if [ $# -lt 1 -o $# -gt 2 ]; then
+    help
+    exit 1
+fi
+dumpcert $1
