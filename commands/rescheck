@@ -1,0 +1,5 @@
+ls res/drawable-mdpi/ >~/mdpi.txt 
+ls res/drawable-hdpi/ >~/hdpi.txt
+kdiff3 ~/mdpi.txt ~/hdpi.txt
+rm ~/mdpi.txt
+rm ~/hdpi.txt

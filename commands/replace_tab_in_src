@@ -1,0 +1,16 @@
+#find . -name '*.c' -print0 | xargs -0 perl -pi -e 's/x_cnt/x_counter/g' 
+
+#find . -name "*.c" -print0 | xargs -0 sed -i 's/x_cnt/x_counter/g'
+
+
+#:%s/res\/com.ijinshan.kbatterydoctor/res-auto
+
+#nmap <F12> :%s/[ \t\r]\+$//g<CR>
+#nmap <F9> :%s/\t/    /g<CR>
+
+#find . -name '*.xml' -print0 | xargs -0 perl -pi -e 's/res\/com.ijinshan.kbatterydoctor/res-auto/g' 
+
+find $1 -name "*.xml" -print0 | xargs -0 sed -i 's/\t/    /g'
+#find $1 -name "*.java" -print0 | xargs -0 sed -i 's/[ \t\r]\+$//g'
+
+

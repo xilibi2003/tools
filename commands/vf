@@ -1,0 +1,46 @@
+#!/bin/bash
+##todo:use tmpfile 
+FF_DATA_STORE='/tmp/ffffff_ff_store'
+unset VF_LIST
+
+
+function vf()
+{
+    #$1: index of the list. begin from "1" to "XX"
+
+    ####get data from file store
+    if [ -f "$FF_DATA_STORE" ]; then 
+        local data=`cat $FF_DATA_STORE`
+        VF_LIST=($data)
+    else
+        VF_LIST=
+    fi
+    
+    if [ "$1" == "" ]; then
+        print_list        
+    elif [ "$1" -le "${#VF_LIST[@]}" ]; then
+        ####open the item choosed by $1
+        editor ${VF_LIST[$(($1-1))]}
+    fi
+}
+
+function print_list()
+{
+    local index=1
+    local item
+    local type
+    echo "list items number is: ${#VF_LIST[@]}"
+    
+    for item in ${VF_LIST[@]}
+    do
+        type=`file -b ${VF_LIST[$(($index-1))]}`
+	printf "%6s  %s\n" "[$index]" "${VF_LIST[$(($index-1))]}\t\t$type"
+        index=$(($index+1))
+    done
+}
+
+##################
+# Main Entry
+# $1: choose index of the 
+##################
+vf $1

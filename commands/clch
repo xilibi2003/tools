@@ -1,0 +1,2 @@
+adb logcat | grep -E "KHome|AndroidRuntime" | coloredlogcat.py
+
