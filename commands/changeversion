@@ -1,0 +1,14 @@
+usage()
+{
+    echo "Exapmle: changeVersion versionCode versionName"
+    exit
+}
+if [ -z $2 ]; then
+    usage
+fi
+
+sed 's/\(android:versionCode="\)[^"]*"/\1'$1'"/g;s/\(android:versionName="\)[^"]*"/\1'$2'"/g' AndroidManifest.xml > AndroidManifest.tmp
+mv -f AndroidManifest.tmp AndroidManifest.xml
+git add -u
+git ci -m "En: (commit by auto script) update version code: '$1' , version name:'$2'"
+git push

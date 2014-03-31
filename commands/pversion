@@ -1,0 +1,1 @@
+grep -n 'android:version' AndroidManifest.xml
