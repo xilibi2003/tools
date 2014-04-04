@@ -1,0 +1,62 @@
+usage() {
+#	echo "this script is for moving bin/9GridLauncher-release.apk to home_apk repositories"
+	echo "usage : mvpkg [pro|free|locker|cn] [my-font]"
+	exit
+}
+
+mvfunc() {
+
+	versionName=$(awk -F'"' '/android:versionName/{print $(NF-1); exit}' AndroidManifest.xml)
+	versionCode=$(awk -F'"' '/android:versionCode/{print $(NF-1); exit}' AndroidManifest.xml)
+
+	pathBase=/Users/Emmett/gitcode/home_apk/
+
+	destPath=${pathBase}$1"/"
+
+ 	if [ ! -d "$destPath" ]; then
+		mkdir "$destPath"
+	fi
+
+	if [ $# == 1 ]; then
+		fileName="home_"$1"_"$versionName"_"$versionCode".apk"
+	elif [ $# == 2 ]; then
+		fileName="home_"$1"_"$2"_"$versionName"_"$versionCode".apk"
+	fi
+	echo apk name: $fileName
+	
+	destFile=$destPath$fileName
+
+	cp $PWD/bin/9GridLauncher-release.apk $destFile
+	echo copy to : $destFile
+
+	gitpush $pathBase $fileName
+
+	exit
+}
+
+gitpush() {
+	cd $1;
+	git add .
+	git ci -m "En:(commit by mvpkg scritp) Add new pkg $2"
+	git push
+	echo "push to home apks done"
+}
+
+
+if [ $# = 0 ] ; then
+	usage
+fi
+
+if [ $1 = "pro" ]; then
+	mvfunc pro $2
+elif [ $1 = "free" ]; then
+	mvfunc free $2
+elif [ $1 = "locker" ]; then
+	mvfunc locker $2
+elif [ $1 = "cn" ]; then
+	mvfunc cn $2
+else
+	usage
+fi
+
+
