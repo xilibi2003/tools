@@ -1,0 +1,10 @@
+#!/bin/sh
+versionName=$(awk -F'"' '/android:versionName/{print $(NF-1); exit}' AndroidManifest.xml)
+versionCode=$(awk -F'"' '/android:versionCode/{print $(NF-1); exit}' AndroidManifest.xml)
+currTime=$(date +"%Y%m%d")
+echo $currTime, $versionName, $versionCode
+
+gitTag=$(sed -e 's/\$DATE\$/'`echo $currTime`'/;s/\$VER_NAME\$/'`echo $versionName`'/;s/\$VER_CODE\$/'`echo $versionCode`'/' git_tag_format)
+echo $gitTag
+git tag $gitTag
+git push origin $gitTag
