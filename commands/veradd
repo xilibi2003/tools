@@ -1,0 +1,12 @@
+#!/bin/sh
+versionCode=$(awk -F'"' '/android:versionCode/{print $(NF-1); exit}' AndroidManifest.xml)
+
+versionCode=`expr $versionCode + 1`;
+echo  $versionCode
+
+sed 's/\(android:versionCode="\)[^"]*"/\1'$versionCode'"/g' AndroidManifest.xml > AndroidManifest.tmp
+mv -f AndroidManifest.tmp AndroidManifest.xml
+
+git add -u
+git ci -m "En: (commit by veradd script) update version code: $versionCode"
+git push
